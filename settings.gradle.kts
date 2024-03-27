@@ -5,4 +5,4 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-rootProject.name = "terra-track-api"
+rootProject.name = "terra_track_api"
