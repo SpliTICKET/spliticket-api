@@ -1,8 +1,11 @@
 package com.terratrack.terra_track_api.controller
 
 import com.terratrack.terra_track_api.config.toUser
+import com.terratrack.terra_track_api.dto.AnimalDto
 import com.terratrack.terra_track_api.dto.EnclosureDto
+import com.terratrack.terra_track_api.entity.Animal
 import com.terratrack.terra_track_api.entity.Enclosure
+import com.terratrack.terra_track_api.service.AnimalService
 import com.terratrack.terra_track_api.service.EnclosureService
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
@@ -13,7 +16,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("/api/enclosure")
-class EnclosureController(private val enclosureService: EnclosureService) {
+class EnclosureController(private val enclosureService: EnclosureService, private val animalService: AnimalService) {
 
     @GetMapping
     fun getEnclosures(authentication: Authentication): ResponseEntity<List<EnclosureDto>> {
@@ -23,12 +26,8 @@ class EnclosureController(private val enclosureService: EnclosureService) {
             enclosureService.findEnclosuresByOwnerId(authUser.userId)
                 .map { enclosure: Enclosure ->
                     EnclosureDto(
-                        enclosure.enclosureId,
-                        enclosure.name,
-                        enclosure.length,
-                        enclosure.width,
-                        enclosure.height,
-                        emptyList()
+                        enclosure,
+                        null
                     )
                 },
             HttpStatusCode.valueOf(200)
@@ -54,7 +53,11 @@ class EnclosureController(private val enclosureService: EnclosureService) {
         }
 
         return ResponseEntity(
-            EnclosureDto(enclosure.enclosureId ,enclosure.name, enclosure.length, enclosure.width, enclosure.height, emptyList()),
+            EnclosureDto(
+                enclosure,
+                animalService.findAnimalByEnclosureId(enclosure.enclosureId!!)
+                    .map { animal: Animal -> AnimalDto(animal, null) }
+            ),
             HttpStatusCode.valueOf(200)
         )
     }

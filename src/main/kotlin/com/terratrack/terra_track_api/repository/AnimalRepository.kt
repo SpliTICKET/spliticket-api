@@ -9,4 +9,6 @@ interface AnimalRepository : JpaRepository<Animal, UUID> {
     fun findAnimalByAnimalIdAndOwnerId(animalId: UUID, ownerId: UUID): Animal?
 
     fun findAnimalsByOwnerId(ownerId: UUID): Collection<Animal>
+
+    fun findAnimalsByEnclosureId(enclosureId: UUID): Collection<Animal>
 }

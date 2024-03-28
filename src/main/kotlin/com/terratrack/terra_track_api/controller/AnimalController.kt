@@ -4,6 +4,7 @@ import com.terratrack.terra_track_api.config.toUser
 import com.terratrack.terra_track_api.dto.AnimalDto
 import com.terratrack.terra_track_api.entity.Animal
 import com.terratrack.terra_track_api.service.AnimalService
+import com.terratrack.terra_track_api.service.EnclosureService
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
@@ -12,7 +13,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("/api/animal")
-class AnimalController(private val animalService: AnimalService) {
+class AnimalController(private val animalService: AnimalService, private val enclosureService: EnclosureService) {
 
     @GetMapping
     fun getAnimals(authentication: Authentication): ResponseEntity<List<AnimalDto>> {
@@ -20,7 +21,7 @@ class AnimalController(private val animalService: AnimalService) {
 
         return ResponseEntity(
             animalService.findAnimalsByOwnerId(authUser.userId)
-                .map { animal: Animal -> AnimalDto(animal.animalId, animal.name, animal.species, animal.enclosureId) },
+                .map { animal: Animal -> AnimalDto(animal, null) },
             HttpStatusCode.valueOf(200)
         )
     }
@@ -47,18 +48,21 @@ class AnimalController(private val animalService: AnimalService) {
 
         try {
             animalUUID = UUID.fromString(animalId)
-        }catch (exception: IllegalArgumentException){
+        } catch (exception: IllegalArgumentException) {
             return ResponseEntity(null, HttpStatusCode.valueOf(400))
         }
 
         val animal = animalService.findAnimalByAnimalIdAndOwnerId(animalUUID, authUser.userId)
 
-        if (animal === null){
+        if (animal === null) {
             return ResponseEntity(null, HttpStatusCode.valueOf(404))
         }
 
         return ResponseEntity(
-            AnimalDto(animal.animalId, animal.name, animal.species, animal.enclosureId),
+            AnimalDto(
+                animal,
+                enclosureService.findEnclosureByEnclosureIdAndOwnerId(animal.enclosureId!!, authUser.userId)
+            ),
             HttpStatusCode.valueOf(200)
         )
     }

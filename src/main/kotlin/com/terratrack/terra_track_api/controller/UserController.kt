@@ -18,7 +18,7 @@ class UserController {
         val authUser = authentication.toUser()
 
         return ResponseEntity(
-            UserDto(authUser.username, authUser.firstName, authUser.lastName, authUser.email),
+            UserDto(authUser),
             HttpStatusCode.valueOf(200)
         )
     }
