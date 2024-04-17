@@ -10,7 +10,7 @@ data class Venue(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "venue_id")
-    var venueId: UUID = UUID.randomUUID(),
+    val venueId: UUID,
 
     @Column(name = "name")
     val name: String,
@@ -19,5 +19,8 @@ data class Venue(
     val address: Address?,
 
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, mappedBy = "venue")
-    val events: List<Event>
+    val events: List<Event>,
+
+    @Column(name = "website")
+    val website: String,
 )

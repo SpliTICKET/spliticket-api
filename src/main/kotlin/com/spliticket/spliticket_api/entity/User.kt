@@ -4,7 +4,6 @@ import jakarta.persistence.*
 import java.util.*
 
 @Entity
-@Table(name = "user")
 data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

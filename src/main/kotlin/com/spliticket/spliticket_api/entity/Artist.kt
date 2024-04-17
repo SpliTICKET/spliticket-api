@@ -20,6 +20,5 @@ data class Artist(
         joinColumns = [JoinColumn(name = "artist_id", referencedColumnName = "artist_id")],
         inverseJoinColumns = [JoinColumn(name = "event_id", referencedColumnName = "event_id")]
     )
-    val events: Collection<Event> = listOf()
-
+    val events: Collection<Event>,
 )
