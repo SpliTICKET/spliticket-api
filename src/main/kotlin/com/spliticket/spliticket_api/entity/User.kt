@@ -28,6 +28,9 @@ data class User(
     @Column(name = "active")
     var active: Boolean = true,
 
+    @Column(name = "moderator")
+    var moderator: Boolean = false,
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "user_has_permission",

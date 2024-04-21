@@ -5,14 +5,12 @@ import java.util.UUID
 
 data class SplitParticipantDto(
     val splitParticipantId: UUID?,
-    val firstName: String?,
-    val lastName: String?,
+    val name: String?,
     val hasPaid: Boolean?,
 ) {
     constructor(splitParticipant: SplitParticipant) : this(
         splitParticipant.splitParticipantId,
-        splitParticipant.firstName,
-        splitParticipant.lastName,
+        splitParticipant.name,
         splitParticipant.hasPaid
     )
 }

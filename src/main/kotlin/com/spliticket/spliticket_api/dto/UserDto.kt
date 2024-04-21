@@ -6,7 +6,8 @@ data class UserDto(
     val username: String,
     val firstName: String,
     val lastName: String,
-    val email: String
+    val email: String,
+    val moderator: Boolean,
 ) {
-    constructor(user: User) : this(user.username, user.firstName, user.lastName, user.email)
+    constructor(user: User) : this(user.username, user.firstName, user.lastName, user.email, user.moderator)
 }

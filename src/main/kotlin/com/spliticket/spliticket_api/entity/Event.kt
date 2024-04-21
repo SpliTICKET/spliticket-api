@@ -11,6 +11,9 @@ data class Event(
     @Column(name = "event_id")
     val eventId: UUID,
 
+    @Column(name = "name")
+    val name: String,
+
     @Embedded
     val price: Price,
 

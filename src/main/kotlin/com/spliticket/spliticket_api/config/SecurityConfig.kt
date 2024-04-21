@@ -30,6 +30,8 @@ class SecurityConfig(
         httpSecurity.authorizeHttpRequests()
             .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/split/*").permitAll()
+            .requestMatchers(HttpMethod.POST, "/api/split/*/splitParticipant").permitAll()
             .requestMatchers("/api/**").authenticated()
             .anyRequest().permitAll()
 

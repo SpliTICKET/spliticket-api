@@ -13,9 +13,7 @@ class UserService(
         return userRepository.findUserByUserId(userId)
     }
 
-    fun findByUsername(username: String): User {
-        return userRepository.findUserByUsername(username)
-    }
+    fun findByUsername(username: String): User? = userRepository.findUserByUsername(username)
 
     fun existsByUsername(username: String): Boolean {
         return userRepository.existsUserByUsername(username)

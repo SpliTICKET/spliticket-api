@@ -9,5 +9,5 @@ interface UserRepository : JpaRepository<User, UUID> {
 
     fun existsUserByUsername(username: String): Boolean
 
-    fun findUserByUsername(username: String): User
+    fun findUserByUsername(username: String): User?
 }

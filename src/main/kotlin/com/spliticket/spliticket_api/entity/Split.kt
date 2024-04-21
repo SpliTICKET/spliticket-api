@@ -9,7 +9,7 @@ data class Split(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "split_id")
-    val splitId: UUID,
+    val splitId: UUID? = null,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "owner_id", referencedColumnName = "user_id")
@@ -19,9 +19,9 @@ data class Split(
     @JoinColumn(name = "event_id")
     val event: Event,
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     @JoinColumn(name = "split_id")
-    val splitParticipants: List<SplitParticipant>,
+    val splitParticipants: MutableList<SplitParticipant>,
 
     @Column(name = "locked")
     @Temporal(TemporalType.DATE)
