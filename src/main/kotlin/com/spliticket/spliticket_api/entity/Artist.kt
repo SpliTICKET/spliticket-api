@@ -9,7 +9,7 @@ data class Artist(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "artist_id")
-    val artistId: UUID,
+    val artistId: UUID? = null,
 
     @Column(name = "name")
     val name: String,
