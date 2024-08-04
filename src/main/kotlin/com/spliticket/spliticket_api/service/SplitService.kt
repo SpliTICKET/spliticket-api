@@ -9,7 +9,7 @@ import com.spliticket.spliticket_api.repository.EventRepository
 import com.spliticket.spliticket_api.repository.SplitRepository
 import com.spliticket.spliticket_api.repository.UserRepository
 import org.springframework.stereotype.Service
-import java.util.UUID
+import java.util.*
 
 @Service
 class SplitService(

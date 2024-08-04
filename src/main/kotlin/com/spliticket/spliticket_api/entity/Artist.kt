@@ -1,7 +1,7 @@
 package com.spliticket.spliticket_api.entity
 
 import jakarta.persistence.*
-import java.util.UUID
+import java.util.*
 
 @Entity
 @Table(name = "artist")

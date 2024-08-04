@@ -2,7 +2,7 @@ package com.spliticket.spliticket_api.entity
 
 import com.spliticket.spliticket_api.embeds.Price
 import jakarta.persistence.*
-import java.util.UUID
+import java.util.*
 
 @Entity
 data class Event(

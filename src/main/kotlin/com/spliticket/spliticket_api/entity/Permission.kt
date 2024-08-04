@@ -1,6 +1,7 @@
 package com.spliticket.spliticket_api.entity
 
 import jakarta.persistence.*
+import org.springframework.security.core.GrantedAuthority
 import java.util.*
 
 @Entity
@@ -15,4 +16,8 @@ data class Permission(
     @Column(name = "name")
     var name: String
 
-)
+) : GrantedAuthority {
+    override fun getAuthority(): String {
+        return name.uppercase()
+    }
+}

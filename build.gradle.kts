@@ -28,8 +28,12 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
     runtimeOnly("com.mysql:mysql-connector-j")
-    implementation("io.jsonwebtoken:jjwt:0.12.5")
-    implementation("io.jsonwebtoken:jjwt-api:0.12.5")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("com.auth0:java-jwt:3.18.2")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.springframework.security:spring-security-config")
+    implementation("org.springframework.security:spring-security-core")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

@@ -1,6 +1,6 @@
 package com.spliticket.spliticket_api.controller
 
-import com.spliticket.spliticket_api.config.toUser
+import com.spliticket.spliticket_api.config.SecurityUtils.getCurrentUser
 import com.spliticket.spliticket_api.dto.*
 import com.spliticket.spliticket_api.entity.Artist
 import com.spliticket.spliticket_api.entity.Split
@@ -9,22 +9,16 @@ import com.spliticket.spliticket_api.service.SplitService
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
-import java.util.UUID
+import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 @RequestMapping("/api/split")
 class SplitController(private val splitService: SplitService) {
 
     @GetMapping
-    fun getSplits(authentication: Authentication): ResponseEntity<List<SplitDto>> = ResponseEntity(
-        splitService.findByOwner(authentication.toUser()).map { split: Split ->
+    fun getSplits(): ResponseEntity<List<SplitDto>> = ResponseEntity(
+        splitService.findByOwner(getCurrentUser()!!).map { split: Split ->
             SplitDto(
                 split.splitId, null, EventDto(
                     null,
@@ -41,9 +35,7 @@ class SplitController(private val splitService: SplitService) {
     @PostMapping
     fun postSplit(authentication: Authentication, @RequestBody splitDto: SplitDto): ResponseEntity<SplitDto> {
         try {
-            val owner = authentication.toUser()
-
-            splitDto.owner = UserDto(owner)
+            splitDto.owner = UserDto(getCurrentUser()!!)
             val split = splitService.createSplit(splitDto)
 
             return ResponseEntity(
@@ -74,7 +66,7 @@ class SplitController(private val splitService: SplitService) {
         var split: Split =
             splitService.findBySplitId(splitId) ?: return ResponseEntity(null, HttpStatusCode.valueOf(404))
 
-        if (split.owner.userId != authentication.toUser().userId) {
+        if (split.owner.userId != getCurrentUser()!!.userId) {
             return ResponseEntity(null, HttpStatusCode.valueOf(403))
         }
 

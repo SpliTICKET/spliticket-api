@@ -1,7 +1,7 @@
 package com.spliticket.spliticket_api.dto
 
 import com.spliticket.spliticket_api.entity.Split
-import java.util.UUID
+import java.util.*
 
 data class SplitDto(
     val splitId: UUID?,

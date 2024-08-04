@@ -1,8 +1,7 @@
 package com.spliticket.spliticket_api.entity
 
 import jakarta.persistence.*
-import java.util.Date
-import java.util.UUID
+import java.util.*
 
 @Entity
 data class Split(

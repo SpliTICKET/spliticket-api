@@ -1,14 +1,16 @@
 package com.spliticket.spliticket_api.controller
 
+import com.spliticket.spliticket_api.config.JwtUtil
 import com.spliticket.spliticket_api.dto.LoginRequestDto
 import com.spliticket.spliticket_api.dto.LoginResponseDto
 import com.spliticket.spliticket_api.dto.RegisterRequestDto
 import com.spliticket.spliticket_api.entity.User
-import com.spliticket.spliticket_api.service.HashService
-import com.spliticket.spliticket_api.service.TokenService
 import com.spliticket.spliticket_api.service.UserService
-import org.springframework.http.HttpStatusCode
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,40 +19,40 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api")
 class AuthController(
-    private val hashService: HashService,
-    private val tokenService: TokenService,
-    private val userService: UserService,
+    @Autowired private val authenticationManager: AuthenticationManager,
+    @Autowired private val jwtUtil: JwtUtil,
+    @Autowired private val userService: UserService,
+    @Autowired private val passwordEncoder: PasswordEncoder
 ) {
+
     @PostMapping("/login")
-    fun postLogin(@RequestBody payload: LoginRequestDto): ResponseEntity<Any> {
-        val user = userService.findByUsername(payload.username)
+    fun createToken(@RequestBody payload: LoginRequestDto): ResponseEntity<LoginResponseDto?> {
+        authenticationManager.authenticate(
+            UsernamePasswordAuthenticationToken(payload.username, payload.password)
+        )
 
-        if (user === null || !hashService.checkBcrypt(payload.password, user.password)) {
-            return ResponseEntity("Wrong username or password", HttpStatusCode.valueOf(400))
-        }
+        val user: User = userService.findByUsername(payload.username)
+            ?: return ResponseEntity.notFound().build()
 
-        return ResponseEntity(LoginResponseDto(tokenService.createToken(user)), HttpStatusCode.valueOf(200))
+        return ResponseEntity.ok().body(LoginResponseDto(jwtUtil.generateToken(user)))
     }
 
     @PostMapping("/register")
-    fun postRegister(@RequestBody payload: RegisterRequestDto): ResponseEntity<Any> {
+    fun register(@RequestBody payload: RegisterRequestDto): ResponseEntity<Any> {
         if (userService.existsByUsername(payload.username)) {
-            return ResponseEntity("Username already exists", HttpStatusCode.valueOf(409))
+            return ResponseEntity.badRequest().body("Username already exists")
         }
 
         val user = User(
             username = payload.username,
-            password = hashService.hashBcrypt(payload.password),
+            password = passwordEncoder.encode(payload.password),
             firstName = payload.firstName,
             lastName = payload.lastName,
-            email = payload.email,
+            email = payload.email
         )
 
         val savedUser = userService.save(user)
 
-        return ResponseEntity(
-            LoginResponseDto(tokenService.createToken(savedUser)),
-            HttpStatusCode.valueOf(200)
-        )
+        return ResponseEntity.ok().body(LoginResponseDto(jwtUtil.generateToken(savedUser)))
     }
 }

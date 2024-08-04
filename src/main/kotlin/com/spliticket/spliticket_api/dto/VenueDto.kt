@@ -2,7 +2,7 @@ package com.spliticket.spliticket_api.dto
 
 import com.spliticket.spliticket_api.embeds.Address
 import com.spliticket.spliticket_api.entity.Venue
-import java.util.UUID
+import java.util.*
 
 data class VenueDto(
     val venueId: UUID?,
