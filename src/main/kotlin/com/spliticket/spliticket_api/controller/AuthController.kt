@@ -26,10 +26,7 @@ class AuthController(
         val user = userService.findByUsername(payload.username)
 
         if (user === null || !hashService.checkBcrypt(payload.password, user.password)) {
-            return ResponseEntity(
-                "Wrong username or password",
-                HttpStatusCode.valueOf(400)
-            )
+            return ResponseEntity("Wrong username or password", HttpStatusCode.valueOf(400))
         }
 
         return ResponseEntity(LoginResponseDto(tokenService.createToken(user)), HttpStatusCode.valueOf(200))

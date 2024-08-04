@@ -6,7 +6,7 @@ plugins {
     kotlin("plugin.jpa") version "1.9.22"
 }
 
-group = "com.terra-track"
+group = "com.spliticket.spliticket_api"
 version = "0.0.1-SNAPSHOT"
 
 java {
@@ -26,6 +26,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
     runtimeOnly("com.mysql:mysql-connector-j")
     implementation("io.jsonwebtoken:jjwt:0.12.5")
     implementation("io.jsonwebtoken:jjwt-api:0.12.5")

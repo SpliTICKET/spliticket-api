@@ -29,14 +29,7 @@ class ArtistController(
                     artist.artistId,
                     artist.name,
                     artist.events.map { event: Event ->
-                        EventDto(
-                            event.eventId,
-                            event.name,
-                            null,
-                            null,
-                            emptyList(),
-                            null
-                        )
+                        EventDto(event.eventId, event.name, null, null, emptyList(), null)
                     })
             },
             HttpStatusCode.valueOf(200)

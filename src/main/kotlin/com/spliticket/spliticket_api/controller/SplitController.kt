@@ -21,26 +21,21 @@ import java.util.UUID
 @RestController
 @RequestMapping("/api/split")
 class SplitController(private val splitService: SplitService) {
+
     @GetMapping
     fun getSplits(authentication: Authentication): ResponseEntity<List<SplitDto>> = ResponseEntity(
-        splitService.findByOwner(authentication.toUser())
-            .map { split: Split ->
-                SplitDto(
-                    split.splitId,
+        splitService.findByOwner(authentication.toUser()).map { split: Split ->
+            SplitDto(
+                split.splitId, null, EventDto(
                     null,
-                    EventDto(
-                        null,
-                        split.event.name,
-                        split.event.price.toString(),
-                        VenueDto(split.event.venue),
-                        split.event.artists.map { artist: Artist -> ArtistDto(artist) },
-                        split.event.website
-                    ),
-                    null,
-                    split.locked.toString()
-                )
-            },
-        HttpStatusCode.valueOf(200)
+                    split.event.name,
+                    split.event.price.toString(),
+                    VenueDto(split.event.venue),
+                    split.event.artists.map { artist: Artist -> ArtistDto(artist) },
+                    split.event.website
+                ), null, split.locked.toString()
+            )
+        }, HttpStatusCode.valueOf(200)
     )
 
     @PostMapping
@@ -53,22 +48,18 @@ class SplitController(private val splitService: SplitService) {
 
             return ResponseEntity(
                 SplitDto(
-                    split.splitId,
-                    UserDto(split.owner),
-                    EventDto(
+                    split.splitId, UserDto(split.owner), EventDto(
                         null,
                         split.event.name,
                         split.event.price.toString(),
                         VenueDto(split.event.venue),
                         split.event.artists.map { artist: Artist -> ArtistDto(artist) },
                         split.event.website
-                    ),
-                    split.splitParticipants.map { splitParticipant: SplitParticipant ->
+                    ), split.splitParticipants.map { splitParticipant: SplitParticipant ->
                         SplitParticipantDto(
                             splitParticipant
                         )
-                    },
-                    split.locked.toString()
+                    }, split.locked.toString()
                 ), HttpStatusCode.valueOf(200)
             )
         } catch (exception: Exception) {
@@ -78,19 +69,10 @@ class SplitController(private val splitService: SplitService) {
 
     @PatchMapping("/{splitId}")
     fun patchSplit(
-        authentication: Authentication,
-        @PathVariable splitId: String,
-        @RequestBody splitDto: SplitDto
+        authentication: Authentication, @PathVariable splitId: UUID, @RequestBody splitDto: SplitDto
     ): ResponseEntity<SplitDto?> {
-        val splitUUID: UUID
-        try {
-            splitUUID = UUID.fromString(splitId)
-        } catch (exception: Exception) {
-            return ResponseEntity(null, HttpStatusCode.valueOf(400))
-        }
-
         var split: Split =
-            splitService.findBySplitId(splitUUID) ?: return ResponseEntity(null, HttpStatusCode.valueOf(404))
+            splitService.findBySplitId(splitId) ?: return ResponseEntity(null, HttpStatusCode.valueOf(404))
 
         if (split.owner.userId != authentication.toUser().userId) {
             return ResponseEntity(null, HttpStatusCode.valueOf(403))
@@ -111,9 +93,7 @@ class SplitController(private val splitService: SplitService) {
                     split.event.website
                 ),
                 split.splitParticipants.map { splitParticipant: SplitParticipant ->
-                    SplitParticipantDto(
-                        splitParticipant
-                    )
+                    SplitParticipantDto(splitParticipant)
                 },
                 split.locked.toString()
             ), HttpStatusCode.valueOf(200)
@@ -121,37 +101,26 @@ class SplitController(private val splitService: SplitService) {
     }
 
     @GetMapping("/{splitId}")
-    fun getSplit(@PathVariable splitId: String): ResponseEntity<SplitDto?> {
-        val splitUUID: UUID
-        try {
-            splitUUID = UUID.fromString(splitId)
-        } catch (exception: Exception) {
-            return ResponseEntity(null, HttpStatusCode.valueOf(400))
-        }
-
-        val split = splitService.findBySplitId(splitUUID)
+    fun getSplit(@PathVariable splitId: UUID): ResponseEntity<SplitDto?> {
+        val split = splitService.findBySplitId(splitId)
 
         if (split == null) {
             return ResponseEntity(null, HttpStatusCode.valueOf(404));
         } else {
             return ResponseEntity(
                 SplitDto(
-                    split.splitId,
-                    UserDto(split.owner),
-                    EventDto(
+                    split.splitId, UserDto(split.owner), EventDto(
                         split.event.eventId,
                         split.event.name,
                         split.event.price.toString(),
                         VenueDto(split.event.venue),
                         split.event.artists.map { artist: Artist -> ArtistDto(artist) },
                         split.event.website
-                    ),
-                    split.splitParticipants.map { splitParticipant: SplitParticipant ->
+                    ), split.splitParticipants.map { splitParticipant: SplitParticipant ->
                         SplitParticipantDto(
                             splitParticipant
                         )
-                    },
-                    split.locked.toString()
+                    }, split.locked.toString()
                 ), HttpStatusCode.valueOf(200)
             )
         }
@@ -159,18 +128,15 @@ class SplitController(private val splitService: SplitService) {
 
     @PostMapping("/{splitId}/splitParticipant")
     fun postSplitParticipant(
-        @PathVariable splitId: String,
-        @RequestBody splitParticipantDto: SplitParticipantDto
+        @PathVariable splitId: UUID, @RequestBody splitParticipantDto: SplitParticipantDto
     ): ResponseEntity<SplitParticipantDto?> {
-        val splitUUID: UUID
-        try {
-            splitUUID = UUID.fromString(splitId)
-            return ResponseEntity(
-                SplitParticipantDto(splitService.addSplitParticipant(splitUUID, splitParticipantDto)),
+        return try {
+            ResponseEntity(
+                SplitParticipantDto(splitService.addSplitParticipant(splitId, splitParticipantDto)),
                 HttpStatusCode.valueOf(200)
             )
         } catch (exception: Exception) {
-            return ResponseEntity(null, HttpStatusCode.valueOf(400))
+            ResponseEntity(null, HttpStatusCode.valueOf(400))
         }
     }
 }

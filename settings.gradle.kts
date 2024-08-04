@@ -5,4 +5,4 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-rootProject.name = "spliticket_api"
+rootProject.name = "spliticket-api"
