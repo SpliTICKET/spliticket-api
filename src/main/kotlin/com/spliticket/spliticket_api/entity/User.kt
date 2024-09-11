@@ -28,14 +28,11 @@ data class User(
     @Column(name = "active")
     var active: Boolean = true,
 
-    @Column(name = "moderator")
-    var moderator: Boolean = false,
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "user_has_permission",
         joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "permission_id", referencedColumnName = "permission_id")]
     )
-    var permissions: Collection<Permission>? = emptyList()
+    var permissions: Collection<Permission> = emptyList()
 )

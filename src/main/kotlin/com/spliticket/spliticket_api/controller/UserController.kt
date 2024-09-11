@@ -1,5 +1,6 @@
 package com.spliticket.spliticket_api.controller
 
+import com.spliticket.spliticket_api.dto.UserDto
 import com.spliticket.spliticket_api.entity.User
 import com.spliticket.spliticket_api.service.UserService
 import org.springframework.http.ResponseEntity
@@ -13,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/user")
 class UserController(val userService: UserService) {
 
-    @GetMapping
-    fun getUser(): ResponseEntity<Any> {
+    @GetMapping("/self")
+    fun getSelf(): ResponseEntity<UserDto?> {
         val authentication: Authentication = SecurityContextHolder.getContext().authentication
         val authUser = authentication.principal as? User
         val username = authUser?.username ?: return ResponseEntity.notFound().build()
         val user = userService.findByUsername(username)
             ?: return ResponseEntity.notFound().build()
 
-        return ResponseEntity.ok(user)
+        return ResponseEntity.ok(UserDto(user))
     }
 }

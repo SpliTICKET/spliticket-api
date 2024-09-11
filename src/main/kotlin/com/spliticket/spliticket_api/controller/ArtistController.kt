@@ -17,6 +17,7 @@ class ArtistController(
 ) {
 
     @GetMapping
+    @Secured("MODERATOR")
     fun getArtists(): ResponseEntity<List<ArtistDto>> {
         return ResponseEntity(
             artistRepository.findAll().sortedBy { artist: Artist -> artist.name }.map { artist: Artist ->
@@ -24,7 +25,7 @@ class ArtistController(
                     artist.artistId,
                     artist.name,
                     artist.events.map { event: Event ->
-                        EventDto(event.eventId, event.name, null, null, emptyList(), null)
+                        EventDto(event.eventId, event.name, null, null, emptyList(), null, null, event.date)
                     })
             },
             HttpStatusCode.valueOf(200)
@@ -32,7 +33,7 @@ class ArtistController(
     }
 
     @PostMapping
-    @Secured("ROLE_MODERATOR")
+    @Secured("MODERATOR")
     fun postArtist(@RequestBody artistDto: ArtistDto): ResponseEntity<ArtistDto?> {
         if (artistDto.name.isNullOrEmpty()) {
             return ResponseEntity(null, HttpStatusCode.valueOf(400))

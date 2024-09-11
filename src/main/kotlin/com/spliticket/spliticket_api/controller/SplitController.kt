@@ -26,7 +26,9 @@ class SplitController(private val splitService: SplitService) {
                     split.event.price.toString(),
                     VenueDto(split.event.venue),
                     split.event.artists.map { artist: Artist -> ArtistDto(artist) },
-                    split.event.website
+                    split.event.website,
+                    split.event.imageUrl,
+                    split.event.date
                 ), null, split.locked.toString()
             )
         }, HttpStatusCode.valueOf(200)
@@ -46,7 +48,9 @@ class SplitController(private val splitService: SplitService) {
                         split.event.price.toString(),
                         VenueDto(split.event.venue),
                         split.event.artists.map { artist: Artist -> ArtistDto(artist) },
-                        split.event.website
+                        split.event.website,
+                        split.event.imageUrl,
+                        split.event.date
                     ), split.splitParticipants.map { splitParticipant: SplitParticipant ->
                         SplitParticipantDto(
                             splitParticipant
@@ -82,7 +86,9 @@ class SplitController(private val splitService: SplitService) {
                     split.event.price.toString(),
                     VenueDto(split.event.venue),
                     split.event.artists.map { artist: Artist -> ArtistDto(artist) },
-                    split.event.website
+                    split.event.website,
+                    split.event.imageUrl,
+                    split.event.date
                 ),
                 split.splitParticipants.map { splitParticipant: SplitParticipant ->
                     SplitParticipantDto(splitParticipant)
@@ -107,7 +113,9 @@ class SplitController(private val splitService: SplitService) {
                         split.event.price.toString(),
                         VenueDto(split.event.venue),
                         split.event.artists.map { artist: Artist -> ArtistDto(artist) },
-                        split.event.website
+                        split.event.website,
+                        split.event.imageUrl,
+                        split.event.date
                     ), split.splitParticipants.map { splitParticipant: SplitParticipant ->
                         SplitParticipantDto(
                             splitParticipant

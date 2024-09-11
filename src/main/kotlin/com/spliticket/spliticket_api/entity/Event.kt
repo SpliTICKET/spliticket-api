@@ -2,6 +2,8 @@ package com.spliticket.spliticket_api.entity
 
 import com.spliticket.spliticket_api.embeds.Price
 import jakarta.persistence.*
+import java.net.URL
+import java.time.ZonedDateTime
 import java.util.*
 
 @Entity
@@ -31,4 +33,10 @@ data class Event(
 
     @Column(name = "website")
     val website: String,
+
+    @Column(name = "image-url")
+    val imageUrl: URL,
+
+    @Column(name = "date")
+    val date: ZonedDateTime,
 )
