@@ -11,17 +11,17 @@ data class Event(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "event_id")
-    val eventId: UUID,
+    val eventId: UUID?,
 
     @Column(name = "name")
-    val name: String,
+    var name: String,
 
     @Embedded
-    val price: Price,
+    var price: Price,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "venue_id")
-    val venue: Venue,
+    var venue: Venue,
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -29,14 +29,14 @@ data class Event(
         joinColumns = [JoinColumn(name = "event_id", referencedColumnName = "event_id")],
         inverseJoinColumns = [JoinColumn(name = "artist_id", referencedColumnName = "artist_id")]
     )
-    val artists: List<Artist> = listOf(),
+    var artists: List<Artist> = listOf(),
 
     @Column(name = "website")
-    val website: String,
+    var website: URL?,
 
     @Column(name = "image-url")
-    val imageUrl: URL,
+    var imageUrl: URL?,
 
     @Column(name = "date")
-    val date: ZonedDateTime,
+    var date: ZonedDateTime,
 )

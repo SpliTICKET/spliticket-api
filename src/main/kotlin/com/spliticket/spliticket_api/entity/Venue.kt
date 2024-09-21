@@ -10,17 +10,17 @@ data class Venue(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "venue_id")
-    val venueId: UUID,
+    val venueId: UUID? = null,
 
     @Column(name = "name")
-    val name: String,
+    var name: String,
 
     @Embedded
-    val address: Address?,
+    var address: Address,
 
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, mappedBy = "venue")
     val events: List<Event>,
 
     @Column(name = "website")
-    val website: String,
+    var website: String,
 )

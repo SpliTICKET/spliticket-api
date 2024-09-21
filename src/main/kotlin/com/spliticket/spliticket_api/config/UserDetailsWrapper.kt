@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails
 class UserDetailsWrapper(private val user: User) : UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         val authorities = mutableListOf<GrantedAuthority>()
-        user.permissions?.forEach { permission -> authorities.add(permission) }
+        user.permissions.forEach { permission -> authorities.add(permission) }
         return authorities
     }
 

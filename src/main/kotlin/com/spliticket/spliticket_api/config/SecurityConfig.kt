@@ -36,8 +36,10 @@ class SecurityConfig(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.csrf { csrf -> csrf.disable() }
-            .authorizeHttpRequests { authz ->
-                authz.requestMatchers("/api/login", "/api/register", "/api/split/*", "/api/split/*/splitParticipant").permitAll()
+            .authorizeHttpRequests { auth ->
+                auth.requestMatchers("/api/login", "/api/register", "/api/split/*", "/api/split/*/splitParticipant")
+                    .permitAll()
+                    .requestMatchers("/api-docs/**", "/swagger-resources/**", "/swagger-ui/**").permitAll()
                     .anyRequest().authenticated()
             }
             .sessionManagement { session ->

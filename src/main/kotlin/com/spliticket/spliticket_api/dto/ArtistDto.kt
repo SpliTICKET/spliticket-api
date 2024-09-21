@@ -8,5 +8,5 @@ data class ArtistDto(
     val name: String?,
     val events: Collection<EventDto>?
 ) {
-    constructor(artist: Artist) : this(artist.artistId, artist.name, null)
+    constructor(artist: Artist) : this(artist.artistId, artist.name, emptyList())
 }

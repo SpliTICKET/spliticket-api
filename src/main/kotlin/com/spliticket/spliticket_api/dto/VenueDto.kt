@@ -11,5 +11,5 @@ data class VenueDto(
     val events: List<EventDto>?,
     val website: String?
 ) {
-    constructor(venue: Venue) : this(venue.venueId, venue.name, venue.address, null, venue.website)
+    constructor(venue: Venue) : this(venue.venueId, venue.name, venue.address, emptyList(), venue.website)
 }

@@ -12,7 +12,7 @@ data class Artist(
     val artistId: UUID? = null,
 
     @Column(name = "name")
-    val name: String,
+    var name: String,
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

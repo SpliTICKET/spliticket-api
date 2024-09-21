@@ -1,7 +1,7 @@
 package com.spliticket.spliticket_api.dto
 
 import com.spliticket.spliticket_api.entity.Permission
-import java.util.UUID
+import java.util.*
 
 class PermissionDto(
     val permissionId: UUID?,
