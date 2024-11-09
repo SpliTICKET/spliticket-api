@@ -82,7 +82,7 @@ class SplitController(private val splitService: SplitService) {
                 split.splitId,
                 UserDto(split.owner),
                 EventDto(
-                    null,
+                    split.event.eventId,
                     split.event.name,
                     split.event.price,
                     VenueDto(split.event.venue),
