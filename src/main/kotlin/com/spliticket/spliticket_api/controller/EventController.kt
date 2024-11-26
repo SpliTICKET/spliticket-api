@@ -41,7 +41,7 @@ class EventController(val eventService: EventService) {
         try {
             if (eventDto.price === null) throw Exception("price required")
             if (eventDto.venue === null || eventDto.venue.venueId === null) throw Exception("venue required")
-            if (eventDto.artists === null || eventDto.artists.isEmpty()) throw Exception("artist required")
+            if (eventDto.artists === null) throw Exception("artist required")
             for (artist in eventDto.artists) {
                 if (artist.artistId === null) throw Exception("incorrect artist")
             }
@@ -62,7 +62,7 @@ class EventController(val eventService: EventService) {
         try {
             if (eventDto.price === null) throw Exception("price required")
             if (eventDto.venue === null || eventDto.venue.venueId === null) throw Exception("venue required")
-            if (eventDto.artists === null || eventDto.artists.isEmpty()) throw Exception("artist required")
+            if (eventDto.artists === null) throw Exception("artist required")
             for (artist in eventDto.artists) {
                 if (artist.artistId === null) throw Exception("incorrect artist")
             }

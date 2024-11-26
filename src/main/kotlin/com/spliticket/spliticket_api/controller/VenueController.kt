@@ -22,7 +22,7 @@ class VenueController(val venueService: VenueService) {
     fun postVenue(@RequestBody venueDto: VenueDto): ResponseEntity<VenueDto?> {
         try {
             if (venueDto.name === null || venueDto.name.trim().isEmpty()) throw Exception("Name is required")
-            if (venueDto.address === null) throw Exception("Name is required")
+            if (venueDto.address === null) throw Exception("Address is required")
             if (venueDto.website === null || venueDto.website.trim().isEmpty()) throw Exception("Website is required")
 
             val venue = venueService.createVenue(venueDto) ?: return ResponseEntity(null, HttpStatus.BAD_REQUEST)
@@ -30,6 +30,16 @@ class VenueController(val venueService: VenueService) {
             return ResponseEntity(VenueDto(venue), HttpStatus.CREATED)
         } catch (ex: Exception) {
             return ResponseEntity(null, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    @GetMapping("/{venueId}")
+    fun getVenue(@PathVariable venueId: UUID): ResponseEntity<VenueDto?> {
+        try {
+            val venue = venueService.findByVenueId(venueId) ?: throw Exception("Venue not found")
+            return ResponseEntity(VenueDto(venue), HttpStatus.OK)
+        }catch (ex: Exception){
+            return ResponseEntity(null, HttpStatus.NOT_FOUND)
         }
     }
 

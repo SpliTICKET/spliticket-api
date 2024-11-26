@@ -30,7 +30,9 @@ class SplitController(private val splitService: SplitService) {
                     split.event.website,
                     split.event.imageUrl,
                     split.event.date
-                ), emptyList(), split.locked.toString()
+                ),
+                split.splitParticipants.map { splitParticipant: SplitParticipant -> SplitParticipantDto(splitParticipant) },
+                split.locked.toString()
             )
         }, HttpStatus.OK
     )
